@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const { login } = useUserAuth();
+  const { login,googleSignIn } = useUserAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -16,6 +16,17 @@ const Login = () => {
     setError("")
     try {
       await login(email, password)
+      navigate("/home");
+    } catch (err) {
+      console.log("login-error", err.message)
+      setError(err.message)
+    }
+  }
+  const handleGoogleSignIn = async (e) => {
+    e.preventDefault()
+    setError("")
+    try {
+      await googleSignIn()
       navigate("/home");
     } catch (err) {
       console.log("login-error", err.message)
@@ -44,6 +55,9 @@ const Login = () => {
           </div>
         </Form>
         <hr />
+        <div>
+          <GoogleButton className='g-btn' type='dark' onClick={(e) => handleGoogleSignIn(e)}></GoogleButton>
+        </div>
         <div className='p-4 box mt-3 text-center'>
           Don't have an account? <Link to='/signup'> Sign up </Link>
         </div>
